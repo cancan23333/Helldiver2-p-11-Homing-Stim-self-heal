@@ -1,0 +1,88 @@
+cfgver=2
+# Homing Stim v1.0.0 - P-11 Stim Pistol guided rounds for FRIENDLY units
+# (Helldivers and SEAF AI).  Derived from Guided Rounds v1.8.0.
+#
+# The weapon is FIXED to the P-11 Stim Pistol.  There is no weapons=
+# list: nothing else is touched by this addon.
+# enable      1 = on. Off puts every value it wrote back.
+enable=1
+# autostart   1 = arm by itself as soon as the game starts.
+autostart=1
+# key         F7 = restart the addon (restore everything, then re-arm).
+key=118
+# ignore_full 1 = a unit at FULL health is never locked, so the stim
+#             only ever flies at somebody who is actually hurt.
+ignore_full=0
+# ------------------------- SELF-HEAL (heal yourself when you shoot) -----
+# self_heal   1 = a REAL P-11 shot heals you.  This does NOT use the rounds:
+#             it hooks the runtime player_fired event and calls the game\'s
+#             own heal (AddHealthFraction), so it clamps at max health and
+#             is refused while you are downed or dead.  Needs HD2Runtime.
+self_heal=0
+# heal_percent  percent of your MAXIMUM health per real shot. 35 is about
+#             what a stim gives back.  The log prints the amount and the
+#             maximum it was scaled from, so this can be dialled exactly.
+heal_percent=35
+# heal_amount  absolute health points instead; 0 = use the percent above.
+heal_amount=0
+# heal_limbs  1 = also repair limb damage (head/chest/hands/knees) on each
+#             heal.  Needs hd2.actions.heal_limbs (HD2Runtime 0.30+); when
+#             the runtime has no such call it is skipped and the log says so.
+heal_limbs=1
+# heal_cooldown seconds that must pass between two heals.
+heal_cooldown=0.5
+# heal_per_event  most heals one fired event may pay for.  The runtime polls
+#             the fired stat ten times a second, so a burst arrives as ONE
+#             event with a count; raise this to 2-3 to heal faster on auto.
+heal_per_event=1
+# cone_deg    aim-cone half angle, and the size of the range ring.
+#             The ring radius is tan(cone) * (h/2) / tan(fov/2), so the
+#             ring only stays on screen while this is less than HALF the
+#             current FOV.  30 looks fine at hipfire but leaves the screen
+#             the moment you aim down the sights; 15 stays visible at every
+#             FOV and still covers a 2.7 m radius at 10 m.  0 = no cone.
+cone_deg=15
+# max_dist    furthest target the round accepts, in metres.
+max_dist=120
+# PRIORITY (fixed, not configurable here):
+#   wounded Helldiver > full-health Helldiver
+#   > wounded SEAF > full-health SEAF
+# Inside one tier the target nearest the aim axis wins.
+# lua_bind    1 = bind a target ourselves when the engine has not.
+lua_bind=1
+# bind_delay  seconds after the muzzle before binding is allowed.
+bind_delay=0.2
+# cone_fallback 1 = lock the nearest candidate when the muzzle forward
+#             vector cannot be read (last resort).
+cone_fallback=0
+# require_assets 1 = ask the runtime to load the P-92 package, which is
+#             where the seeker lives.  Keep this on.
+require_assets=1
+# seek_speed  speed of the guided round, m/s. 0 = leave the game value
+#             (the warrant seeker ships at 90 m/s, which crawls).
+seek_speed=0
+# seek_accel  optional seeker acceleration. 0 = leave the game value.
+seek_accel=0
+seek_ptr=0
+# los_check   1 = do not lock through solid cover.
+los_check=1
+# los_foliage 1 = leaves do not count as cover.
+los_foliage=1
+# los_desc    which of the engine\'s 35 collision profiles (0-34) the
+#             sight test uses. 0 already recognises ground and solid
+#             cover; only raise it if cover is being missed.
+los_desc=0
+# los_debug   1 = log every ray and every hit (cfg only, not in the menu).
+los_debug=0
+scan_ms=4
+target_interval=20
+# lock_reticle 1 = draw the lock markers on the target.
+lock_reticle=1
+# range_ring   1 = draw the aim-cone range ring.
+range_ring=1
+# target_box   1 = draw the wire box on the locked target.
+target_box=1
+# debug       1 = verbose log (cfg only, not in the menu).
+debug=0
+# seek_entity 0 = the P-92 Warrant round (default and recommended).
+seek_entity=0

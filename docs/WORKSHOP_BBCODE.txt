@@ -1,0 +1,184 @@
+[CENTER][SIZE=6][B]Homing Stim[/B][/SIZE]
+[SIZE=4]P-11 治疗剂手枪 · 制导治疗弹 · 射击自我恢复[/SIZE]
+[SIZE=3]P-11 Stim Pistol · Guided Healing Darts · Heal Yourself When You Fire[/SIZE]
+
+[SIZE=3][B]v1.0.12[/B] · by [B]cancan2333[/B][/SIZE][/CENTER]
+
+[HR][/HR]
+
+[SIZE=5][B]它是什么 / What it is[/B][/SIZE]
+
+[B]中文[/B]
+把 [B]P-11 治疗剂手枪[/B] 变成一把[B]会自己找队友的治疗枪[/B]：扣下扳机，弹丸出膛后自动转向，追踪索敌范围内
+[B]残血的友军[/B]，并且[B]开枪的同时也治疗你自己[/B]。
+
+它锁定的是[B]友军[/B]，不是敌人：潜兵和 SEAF AI NPC。锁定优先度固定为：
+
+[LIST=1]
+[*][B]残血潜兵[/B]
+[*][B]满血潜兵[/B]
+[*][B]残血 SEAF[/B]
+[*][B]满血 SEAF[/B]
+[/LIST]
+
+上一档永远压过下一档；同一档内，离准心最近的胜出。
+
+[B]English[/B]
+Turns the [B]P-11 Stim Pistol[/B] into a stim gun that [B]finds your teammates for you[/B]: pull the trigger and the
+dart steers itself in flight toward a [B]wounded friendly[/B] inside your lock cone - and [B]heals you as you fire[/B].
+
+It locks [B]friendlies[/B], never enemies: Helldivers and SEAF AI NPCs. The priority order is fixed:
+
+[LIST=1]
+[*][B]Wounded Helldiver[/B]
+[*][B]Full-health Helldiver[/B]
+[*][B]Wounded SEAF[/B]
+[*][B]Full-health SEAF[/B]
+[/LIST]
+
+A higher tier always beats a lower one; inside a tier, whichever unit is closest to your crosshair wins.
+
+[HR][/HR]
+
+[SIZE=5][B]亮点 / Highlights[/B][/SIZE]
+
+[LIST]
+[*][B]只改 P-11 / P-11 only[/B] —— 固定为 P-11 治疗剂手枪，不碰任何其他武器，也不改它的伤害、初速或弹道。 / Fixed to the P-11 Stim Pistol. No other weapon is touched, and the P-11 keeps its own damage, muzzle velocity and ballistics.
+[*][B]锁定友军，四档优先度 / Friendly-only locking with the four-tier priority above[/B] —— 潜兵用「本地玩家自己的实体类型」判定（不需要外部哈希表，游戏更新也不会失效），SEAF 按[B]完整的 20 个身体白名单[/B]放行。 / Helldivers are recognised by the local avatar's own entity type (no external hash list, so it cannot go stale); SEAF are admitted from a [B]complete 20-entry whitelist[/B] of every SEAF body.
+[*][B]射击时自我恢复 / Heal yourself when you fire[/B] —— 真实开枪就给自己回血。挂的是运行时的 [FONT=monospace]player_fired[/FONT] 事件（游戏自己的 [FONT=monospace]projectiles_fired[/FONT] 统计），所以[B]换弹、拔枪、空扳机都不会回血[/B]；回血走游戏自己的 [FONT=monospace]AddHealthFraction[/FONT]，[B]自动封顶到最大血量[/B]，倒地或死亡时会被拒绝。还能[B]顺便修复部位损伤[/B]（头/胸/双手/双膝）。[B]不写内存、不改游戏数据。[/B] / A [B]real[/B] shot heals you. It hooks the runtime's [FONT=monospace]player_fired[/FONT] event (the game's own [FONT=monospace]projectiles_fired[/FONT] stat), so reloading, drawing the pistol or dry-firing heals nothing; the heal is the game's own [FONT=monospace]AddHealthFraction[/FONT] - it clamps at maximum health and is refused while you are downed or dead. It also repairs [B]limb damage[/B] (head / chest / hands / knees). [B]Nothing is written to memory and no game data is patched.[/B]
+[*][B]屏幕锁定 UI / On-screen lock UI[/B] —— 索敌[B]范围圆环[/B]、目标身上的[B]锁定标记[/B]（锁定完成时旋转收拢）、目标外面的[B]锁定部位方框[/B]，三者各自独立开关。 / A [B]range ring[/B], the stock [B]lock markers[/B] on the target (they spin in as the lock completes) and a [B]wire box[/B] on the locked unit - each with its own switch.
+[*][B]掩体判断 / Cover check[/B] —— 你和目标之间有实体挡住时不锁定。射线[B]从枪口发出[/B]，判的就是子弹这条路，而不是相机的视线。 / A unit with no line of sight is not locked. The ray is fired [B]from the muzzle[/B], so it tests the path the dart would actually take rather than the camera's.
+[*][B]自己绑定目标 / Bind the target ourselves[/B] —— 引擎没锁上时由 mod 在瞄准锥里挑一个绑上去，建议保持开启。 / When the engine does not lock by itself, the mod picks one inside the aim cone and binds it. Recommended to leave on.
+[*][B]菜单自动双语 / The MODS tab follows your language[/B] —— [B]简体中文和繁体中文显示中文，其它任何语言显示英文[/B]，而且在游戏内改语言[B]不用重启[/B]就会跟着变。 / The MODS tab shows Chinese for Simplified and Traditional Chinese and [B]English for every other language[/B], and it follows a language change in game [B]without a restart[/B].
+[*][B]实时可调 / Tune it live[/B] —— 12 个选项全部在游戏内 MODS 菜单里，含两个滑条；只占 [B]1 个分类[/B]，不会挤掉别的 mod 的分类按钮。 / All 12 options live in the in-game MODS tab (including two sliders) and use [B]one single category[/B], so no other mod's category button is pushed off the tab.
+[*][B]F7 一键复位 / F7 to reset[/B] —— 偶发「锁不上」时按 F7：把写过的值全部还原再重新武装，不用重开游戏。 / When it occasionally stops locking, press F7: everything written is restored and re-armed, with no need to restart the game.
+[/LIST]
+
+[HR][/HR]
+
+[SIZE=5][B]依赖项 / Requirements[/B][/SIZE]
+
+[B]三个都需要，而且都必须启用。[/B] / [B]All three are required and must be enabled.[/B]
+
+[LIST]
+[*][B][URL='https://ayakamods.com/mods/bingus-shared-loader.3861/']Bingus Shared Loader[/URL][/B] —— v15+ / API 1
+[*][B][URL='https://ayakamods.com/mods/hd2runtime.4260/']HD2Runtime[/URL][/B] —— v0.40.0+
+[*][B][URL='https://ayakamods.com/mods/vanilla-plus-megapack.3913/']Vanilla Plus Megapack[/URL][/B] —— 提供游戏内的 MODS 页签（没有它就只能在 cfg 里改设置） / provides the in-game MODS tab (without it you can only edit the cfg file)
+[/LIST]
+
+本 mod 会在启动时自行 require 前两个，[B]不需要手动排序[/B]。 / It requires the first two itself at startup, so [B]no manual load order is needed[/B].
+
+[HR][/HR]
+
+[SIZE=5][B]使用方法 / How to use[/B][/SIZE]
+
+[LIST=1]
+[*][B]安装[/B]：用管理器导入本压缩包 → 启用 → [B]purge & redeploy[/B] → 重启游戏。 / [B]Install:[/B] import the zip with your mod manager, enable it, [B]purge & redeploy[/B], then restart the game.
+[*][B]确认依赖[/B]：上面三个都启用。 / [B]Check the dependencies:[/B] all three above enabled.
+[*][B]进游戏拿枪[/B]：带上 [B]P-11 治疗剂手枪[/B]。 / [B]Take the gun:[/B] equip the [B]P-11 Stim Pistol[/B].
+[*][B]改设置[/B]：逃生菜单 → [B]MODS[/B] 页签 → [B]HOMING STIM[/B] 分类。改完按提示 APPLY 才会生效。 / [B]Tune it:[/B] escape menu → [B]MODS[/B] tab → [B]HOMING STIM[/B]. Changes take effect when you APPLY them.
+[*][B]开火[/B]：对着队友方向扣扳机，弹丸会自己转向他。 / [B]Fire:[/B] pull the trigger toward a teammate; the dart steers itself into them.
+[*][B]锁不上就按 F7[/B]。 / [B]If it stops locking, press F7.[/B]
+[/LIST]
+
+[SIZE=4][B]选项 / Options[/B][/SIZE]
+
+[LIST]
+[*][B]启用 / ENABLE[/B] —— 总开关。关闭会把所有写过的内存还原成出厂值。 / Master switch. Turning it off restores everything it wrote.
+[*][B]锁定范围锥角（度） / LOCK ANGLE[/B] —— 默认 [B]15[/B]。友军偏离准心多少度仍会被锁定，[B]同时决定屏幕上范围环的大小[/B]。 / Default [B]15[/B]. How far off the crosshair a friendly may sit and still be picked up; it also sizes the range ring.
+[*][B]锁定距离（米） / LOCK RANGE[/B] —— 默认 [B]120[/B]。 / Default [B]120[/B].
+[*][B]射击时自我恢复 / HEAL YOURSELF WHEN FIRING[/B] —— 默认关。真实开枪就给自己回血。 / Off by default. A real shot heals you.
+[*][B]自我恢复量（最大血量%） / SELF-HEAL AMOUNT[/B] —— 默认 [B]35[/B]，约等于一针兴奋剂的量。 / Default [B]35[/B], about what a stim gives back.
+[*][B]自我恢复冷却（秒） / SELF-HEAL COOLDOWN[/B] —— 默认 [B]0.5[/B]。 / Default [B]0.5[/B].
+[*][B]满血目标过滤 / IGNORE FULL HEALTH[/B] —— 默认关。开启后[B]不锁定满血的友军[/B]，只锁真正受伤的目标。 / Off by default. When on, a [B]full-health[/B] friendly is never locked.
+[*][B]显示范围环 / RANGE RING[/B]、[B]显示锁定标记 / LOCK MARKERS[/B]、[B]显示锁定部位 / TARGET BOX[/B] —— 三个锁定 UI 元素，各自独立开关，默认全开。 / The three lock-UI elements, each with its own switch, all on by default.
+[*][B]掩体判断 / REQUIRES LINE OF SIGHT[/B] —— 默认开。 / On by default.
+[*][B]自己绑定目标 / BIND TARGET OURSELVES[/B] —— 默认开，[B]建议保持开启[/B]。 / On by default; [B]recommended to leave it on[/B].
+[/LIST]
+
+[B]提示：[/B]范围环的屏幕半径是 [FONT=monospace]tan(锥角) × (屏高/2) ÷ tan(视场角/2)[/FONT]，
+所以[B]锥角只有小于当前视场角的一半时，圆环才留在屏幕内[/B]。出厂值 15° 在所有视场角下都看得见；
+调到 30° 左右，开镜时圆环就会跑出屏幕。 / [B]Tip:[/B] the ring's radius is
+[FONT=monospace]tan(angle) × (screen height / 2) ÷ tan(fov / 2)[/FONT], so it stays on screen only while the angle is
+narrower than [B]half your current FOV[/B]. 15 degrees stays visible at every FOV; around 30 it leaves the screen
+when you aim down the sights.
+
+[SIZE=4][B]只在 cfg 里的设置 / Settings that live only in the cfg file[/B][/SIZE]
+
+[FONT=monospace]%LOCALAPPDATA%\HomingStim\homing_stim.cfg[/FONT] —— 首次运行自动写出。 / written on first run.
+
+[LIST]
+[*][FONT=monospace]heal_amount[/FONT] —— 改用绝对血点（0 = 用上面的百分比）。 / use absolute health points instead (0 = use the percentage).
+[*][FONT=monospace]heal_limbs[/FONT] —— 是否顺便修复部位损伤。 / whether to repair limb damage too.
+[*][FONT=monospace]heal_per_event[/FONT] —— 一个已射击事件最多付几次（连射想回得更快就调 2–3）。 / most heals one fired event may pay for (raise to 2-3 for faster healing on auto).
+[*][FONT=monospace]debug[/FONT]、[FONT=monospace]los_debug[/FONT]、[FONT=monospace]los_foliage[/FONT]、[FONT=monospace]bind_delay[/FONT]、[FONT=monospace]cone_fallback[/FONT] —— 排查用。 / diagnostics.
+[/LIST]
+
+[HR][/HR]
+
+[SIZE=5][B]已知问题 / Known issues[/B][/SIZE]
+
+[LIST]
+[*][B]主机视角下，别人看你射击会出现粉色问号 / Pink question mark when YOU are the host[/B]
+本 mod 必须把弹丸换成带制导组件的实体，而[B]这个实体由射手生成并同步给其他人[/B]，所以[B]每台机器都必须自己备好它的资源包[/B]。
+[B]没装本 mod 的机器上没有这个资源包，就会把你的弹丸画成一个粉色问号。[/B]
+这是游戏机制（资源加载是本机的），[B]无法从本机修复[/B]，也不是本 mod 的 bug。
+缓解办法：让队友也装本 mod；或队里有人[B]带着 P-92 法令手枪[/B]（那样该资源包会常驻）。 /
+The mod has to swap the projectile for an entity that carries the guidance component, and [B]that entity is spawned by the shooter and replicated[/B], so [B]every machine must already have its package loaded[/B]. A machine that does not run this mod has no such package and draws your dart as a pink question mark. This is game behaviour (asset loading is per machine), it [B]cannot be fixed from your side[/B], and it is not a bug in this mod. Mitigation: have your teammates install this mod too, or have someone in the lobby [B]carry a P-92 Warrant[/B] (which keeps the package resident).
+
+[*][B]做为客机时可能不会出现问号 / As a CLIENT the question mark may not appear[/B]
+[B]推荐以客机身份加入别人的房间[/B]：房主（主机）通常已经带着把他的弹丸资源包加载好了，所以你看到的弹丸模型多半是正常的。 /
+[B]Joining someone else's lobby as a client is recommended:[/B] the host has usually already loaded the package for their own dart, so the model you see is most likely correct.
+
+[*][B]可能会出现个别 SEAF 无法锁定 / A few individual SEAF may not lock[/B]
+SEAF 是按[B]实体类型哈希白名单[/B]放行的。如果游戏版本更新后出现新的 SEAF 型号、或者某个单位的实体类型不在名单里，
+它就会[B]完全进不了候选[/B]。遇到时请把日志里的 [FONT=monospace]SCAN not-admitted entity types[/FONT] 那行发出来，
+那一行会直接打出被拒绝的实体哈希，加进名单即可。 /
+SEAF are admitted from a [B]whitelist of entity-type hashes[/B]. If a game update adds a new SEAF variant, or a unit's
+entity type is not in the list, it [B]cannot enter the candidate list at all[/B]. If you hit one, send the
+[FONT=monospace]SCAN not-admitted entity types[/FONT] line from the log - it prints the refused hash directly.
+
+[*][B]和 Guided Rounds 同时启用会冲突 / Conflicts with Guided Rounds[/B]
+两者都会抢 P-11 的设置行。请[B]只启用其中一个[/B]。 / Both claim the P-11's settings row. Enable [B]only one[/B].
+
+[*][B]SEAF 不一定每次都测得到 / SEAF may not always be testable[/B]
+SEAF 只在[B]带对应词条的星球[/B]上出现；没有词条时呼叫 SEAF 增援会让游戏在鹈鹕落地后崩溃。潜兵那条路在双人游戏里随时可测。 /
+SEAF only spawn on [B]planets with the right modifier[/B]; calling SEAF reinforcements without it crashes the game after
+the Pelican lands. The Helldiver path is testable any time in a two-player game.
+
+[*][B]不开加速/耐力 / No speed or stamina buff[/B]
+一针兴奋剂在游戏里做三件事：回血、修部位、给几秒加速。本 mod 做到[B]前两件[/B]；加速属于状态效果，运行时
+[B]明确不支持[/B]施加 stim 类状态，所以做不到。 /
+A stim does three things: heals, repairs limbs, and grants a few seconds of speed. This mod does the [B]first two[/B];
+the speed part is a status effect and the runtime [B]does not support[/B] applying stim-type statuses.
+[/LIST]
+
+[HR][/HR]
+
+[SIZE=5][B]日志与排查 / Log and troubleshooting[/B][/SIZE]
+
+[FONT=monospace]%LOCALAPPDATA%\HomingStim\HomingStim.log[/FONT]
+
+[LIST]
+[*][FONT=monospace]READY - P-11 Stim Pistol located[/FONT] —— 枪认出来了、租约已生效。 / the gun was found and the lease is in place.
+[*][FONT=monospace]SCAN not-admitted entity types[/FONT] —— [B]被拒绝的实体类型及次数[/B]。锁不上的单位会在这里显示它自己的哈希。 / [B]the entity types that were refused[/B] - an un-lockable unit shows its own hash here.
+[*][FONT=monospace]SCAN ... seek active=...[/FONT] —— 制导管理器里的弹丸数。 / how many rounds are in the seeking manager.
+[*][FONT=monospace]LEASE ok[/FONT] / [FONT=monospace]RESTORE[/FONT] —— 租约的取得与归还。 / the lease being taken and given back.
+[*][FONT=monospace]BIND #n -> ...[/FONT] —— 一次成功的目标绑定，含名称、距离和档位。 / one successful target binding, with name, range and tier.
+[*][FONT=monospace]SELF-HEAL subscribed to player_fired[/FONT] —— 自我恢复挂上了事件。 / the self-heal hooked the fired event.
+[*][FONT=monospace]ASSET resident[/FONT] / [FONT=monospace]ASSET rejected[/FONT] —— 弹丸资源包在本机的加载结果。 / the dart package's load result on this machine.
+[/LIST]
+
+[HR][/HR]
+
+[SIZE=5][B]制作与致谢 / Credits[/B][/SIZE]
+
+[LIST]
+[*]本 mod 由 [B][URL='https://ayakamods.com/mods/diy-your-weapon-to-shoot-like-donk-apw-1-%E5%8F%8D%E5%99%A8%E6%9D%90%E9%94%81%E5%A4%B4mod-diy-able.4226/']DIY Your Weapon to Shoot Like Donk APW-1（反器材锁头 mod / DIY-able）[/URL][/B] 修改而来。 / This mod is derived from [B][URL='https://ayakamods.com/mods/diy-your-weapon-to-shoot-like-donk-apw-1-%E5%8F%8D%E5%99%A8%E6%9D%90%E9%94%81%E5%A4%B4mod-diy-able.4226/']DIY Your Weapon to Shoot Like Donk APW-1 (DIY-able)[/URL][/B].
+[*]制导机制、内存偏移与大部分实现在 [B]Guided Rounds v1.8.0 / v1.8.5[/B]（作者 cancan2333 & SoS2430）的成果之上完成，本 mod 也从其中移植了锁定 UI、专属设置行与方框释放的修复。 / The guidance mechanism, memory offsets and much of the implementation build on [B]Guided Rounds v1.8.0 / v1.8.5[/B] by cancan2333 & SoS2430, from which the lock UI, the private settings row and the box-release fix are ported.
+[*][B]潜兵与 SEAF 的资源哈希[/B]取自社区的《绝地潜兵2资源ID》表。 / The [B]Helldiver and SEAF resource hashes[/B] come from the community Helldivers 2 resource-ID workbook.
+[*][B]Bingus Shared Loader[/B] 与 [B]HD2Runtime[/B] 由 CowboyBingus / skyeshade 开发。 / [B]Bingus Shared Loader[/B] and [B]HD2Runtime[/B] are by CowboyBingus / skyeshade.
+[*]游戏素材与商标版权属于 [B]Arrowhead Game Studios[/B]。 / Game assets and trademarks belong to [B]Arrowhead Game Studios[/B].
+[/LIST]
+
+[B]开源 / Open source[/B]：[URL='https://github.com/cancan23333/Helldiver2-p-11-Homing-Stim-self-heal'][B]GitHub · Helldiver2-p-11-Homing-Stim-self-heal[/B][/URL] （[B]MIT[/B] 协议） / licensed under [B]MIT[/B]
