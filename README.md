@@ -3,9 +3,24 @@
 **P-11 治疗剂手枪 · 制导治疗弹 · 射击自我恢复** — 把 P-11 变成一把会自己找队友、开枪还能治自己的治疗枪。
 **P-11 Stim Pistol · guided healing darts · heal yourself when you fire.**
 
-**[English](#english)** · **[中文](#中文)**
-
 v1.0.12 · by **cancan2333** · **MIT** · [GitHub](https://github.com/cancan23333/Helldiver2-p-11-Homing-Stim-self-heal)
+
+---
+
+> ## ENGLISH UI SUPPORTED
+>
+> **This mod's in-game MODS tab is bilingual and fully automatic.**
+>
+> It displays in **ENGLISH** for every game language except Simplified and Traditional Chinese, where it displays
+> Chinese. **Nothing needs to be configured** — it follows your game's Text Language setting, and it changes in game
+> **without a restart**.
+>
+> Every option has an English name and an English description, so the mod is fully usable without reading any Chinese.
+> Settings can be edited by hand as well, in `%LOCALAPPDATA%\HomingStim\homing_stim.cfg`.
+
+---
+
+**[中文](#中文) — 中文说明在前** · **[English](#english) — English section below**
 
 ---
 
